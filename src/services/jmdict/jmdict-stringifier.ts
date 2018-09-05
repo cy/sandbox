@@ -7,13 +7,16 @@ export abstract class JMDictStringifier {
         }
 
         fs.open(filename, 'w', (err, fd) => {
-            fs.write(fd, '[\n', () => {});
-            
+            let counter = 0;
             for (const entry of dictionary.entry) {
-                fs.write(fd, `  ${JSON.stringify(entry)},\n`, () => {});
+                if(entry) {
+                  fs.write(fd, `{ "index" : { "_index" : "jmdict", "_type" : "doc", "_id" : "${counter}" } }\n${JSON.stringify(entry)}\n`, () => {});
+                  counter++;
+                  //if(counter === 100) {
+                    //break
+                  //}
+                }
             }
-
-            fs.write(fd, ']\n', () => {});
         });
     }
 }
